@@ -1,0 +1,23 @@
+#!/usr/bin/env perl 
+
+#PODNAME: cenas.pl
+
+use strict; use warnings;
+use Data::Dump qw/dump/;
+use feature qw/say/;
+
+open(my $embf, '<', 'embeddings.txt');
+open(my $relf, '<', 'relatedness_full.tsv');
+
+my $ents = {};
+
+while(my $line = <$embf>){
+    $line =~ /^<(.*?)>/;
+    $ents->{$1} = 1;
+}
+
+while(my $line = <$relf>){
+    chomp $line;
+    my ($u1,$u2,$score,$set) = split /\t/,$line;
+    say $line if $ents->{$u1} && $ents->{$u2};
+}

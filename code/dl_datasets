@@ -1,0 +1,4 @@
+
+if [[! -f DBpediaVectors200_20Shuffle.txt.gz }}; then
+    curl http://data.dws.informatik.uni-mannheim.de/rdf2vec/models/DBpedia/2016-04/GlobalVectors/11_pageRankSplit/DBpediaVecotrs200_20Shuffle.txt | gzip > DBpediaVectors200_20Shuffle.txt.gz
+fi
