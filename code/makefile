@@ -12,7 +12,7 @@ entities.txt: relatedness_full.tsv
 
 
 embeddings.txt: DBpediaVectors200_20Shuffle.txt.gz entities.txt
-	pv DBpediaVectors200_20Shuffle.txt.gz | gunzip | grep -f entities.txt -F > embeddings.txt
+	pv DBpediaVectors200_20Shuffle.txt.gz | gunzip | grep -f entities.txt -F | sed 's/^<//' | sed 's/> / /' > embeddings.txt
 
 
 relatedness.tsv: embeddings.txt relatedness_full.tsv
