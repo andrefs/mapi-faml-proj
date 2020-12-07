@@ -4,10 +4,11 @@
 
 use strict; use warnings;
 use Data::Dump qw/dump/;
+use FindBin;
 use feature qw/say/;
 
-open(my $embf, '<', '../2_clean_datasets/embeddings.txt');
-open(my $relf, '<', '../2_clean_datasets/relatedness_full.tsv');
+open(my $embf, '<', "$FindBin::Bin/../2_clean_datasets/embeddings.txt") or die $!;
+open(my $relf, '<', "$FindBin::Bin/../2_clean_datasets/relatedness_full.tsv") or die $!;
 
 my $ents = {};
 
