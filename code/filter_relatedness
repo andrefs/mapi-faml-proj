@@ -6,8 +6,8 @@ use strict; use warnings;
 use Data::Dump qw/dump/;
 use feature qw/say/;
 
-open(my $embf, '<', 'embeddings.txt');
-open(my $relf, '<', 'relatedness_full.tsv');
+open(my $embf, '<', '../2_clean_datasets/embeddings.txt');
+open(my $relf, '<', '../2_clean_datasets/relatedness_full.tsv');
 
 my $ents = {};
 
