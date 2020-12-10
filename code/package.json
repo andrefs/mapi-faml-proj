@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@comunica/actor-init-sparql": "^1.18.1",
+    "bluebird": "^3.7.2"
+  }
+}

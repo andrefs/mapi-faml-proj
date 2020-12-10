@@ -1,0 +1,138 @@
+const Promise = require('bluebird');
+const readline = require('readline');
+const fs = require('fs').promises;
+const path = require('path');
+const newEngine = require('@comunica/actor-init-sparql').newEngine;
+const eng = newEngine();
+
+async function getWdUrl(data){
+  console.warn(`Asking DBpedia for info about ${data.dbpUrl}`);
+  const dbpQuery = `
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX gold: <http://purl.org/linguistics/gold/>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX dbp: <http://dbpedia.org/property/>
+
+    SELECT ?wd ?dbsub ?dbt ?t ?hym ?wn ?hyp ?sub WHERE {
+      {
+        <${data.dbpUrl}> owl:sameAs ?wd .
+        FILTER regex(str(?wd), "wikidata.org/entity/Q")
+      }
+      UNION {
+        SELECT ?sub WHERE {
+          ?sub rdf:type <${data.dbpUrl}> .
+        } LIMIT 5
+      }
+      UNION {
+        SELECT ?dbsub WHERE {
+          ?dbsub dbo:type <${data.dbpUrl}> .
+        } LIMIT 5
+      }
+      UNION {
+        SELECT ?hym WHERE {
+          ?hym gold:hypernym <${data.dbpUrl}> .
+        } LIMIT 5
+      }
+      UNION {
+        SELECT ?wn WHERE {
+          ?wn dbp:wordnet_type <${data.dbpUrl}> .
+        } LIMIT 5
+      }
+      UNION {
+        <${data.dbpUrl}> rdf:type ?t .
+        FILTER regex(str(?t), "dbpedia.org/(ontology|resource)")
+      }
+      UNION {
+        <${data.dbpUrl}> gold:hypernym ?hyp .
+        FILTER regex(str(?hyp), "dbpedia.org/(ontology|resource)")
+      }
+      UNION { <${data.dbpUrl}> dbo:type ?dbt . }
+    }
+
+  `;
+  const result = await eng.query(dbpQuery, {
+    sources: ['http://dbpedia.org/sparql'],
+  });
+  const bindings = await result.bindings();
+  bindings.forEach(b => {
+    if(b.get('?wd')){
+      data.wdUrl = b.get('?wd').value;
+    }
+    for(const v of ['dbsub', 'dbt', 't', 'hym', 'wn', 'sup', 'hyp', 'sub']){
+      if(b.get('?'+v)){
+        data[v] = data[v] || [];
+        data[v].push(b.get('?'+v).value);
+      }
+    }
+  });
+}
+
+async function getWdLabel(data){
+  if(!data.wdUrl){
+    console.warn(`No Wikidata URL found`);
+    return;
+  }
+  console.warn(`Asking Wikidata for label for ${data.wdUrl}`);
+  const wdQuery = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+    SELECT ?l WHERE {
+      <${data.wdUrl}> rdfs:label ?l .
+      FILTER (lang(?l) = 'en')
+    }
+  `;
+  const result = await eng.query(wdQuery, {
+    sources:['http://query.wikidata.org/sparql']
+  });
+  const bindings = await result.bindings();
+  data.wdLabel = bindings.map(b => b.get('?l'))[0]?.value;
+}
+
+async function openFile(fp){
+  return fs.readFile(fp, {encoding: 'utf-8'}).then(str => str.split(/\n/));
+}
+
+function classify(data){
+  if(!data.wdUrl){
+    data['class'] = 'no-link';
+    return;
+  }
+  if(!data.wdLabel){
+    data['class'] = 'no-label';
+    return;
+  }
+
+  const normLabel = data.wdLabel.replace(/^(\P{L}\S*\s*)+/u, '')
+  if(!normLabel){
+      data['class'] = 'inconclusive';
+    return;
+  }
+
+  data['class'] = normLabel[0] === normLabel[0].toUpperCase() ? 'NE' : 'concept';
+}
+
+async function processUrls(){
+  const fp = path.resolve(__dirname,'../2_clean_datasets/entities.txt');
+  let lines = await openFile(fp);
+  let res = [];
+
+  return Promise.each(lines, line => Promise.delay(200).then(() => {
+      let data = {};
+      line.match(/^<(.*)>$/);
+      data.dbpUrl = RegExp.$1;
+      if(data.dbpUrl){
+        return getWdUrl(data)
+          .then(() => getWdLabel(data))
+          .then(() => {
+            classify(data);
+            console.warn(data);
+            res.push(data);
+          });
+      }
+    }))
+    .finally(() => fs.writeFile('classes.json', JSON.stringify(res, null, 2), {encoding: 'utf-8'}));
+}
+
+processUrls().then(() => console.warn('Finished'));
+
