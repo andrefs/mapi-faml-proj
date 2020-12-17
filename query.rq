@@ -1,0 +1,9 @@
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix owl: <http://www.w3.org/2002/07/owl#>
+
+select ?o ?l where {
+  <http://dbpedia.org/resource/Landscaping> owl:sameAs ?o .
+  SERVICE <http://query.wikidata.org/> {
+    ?o rdfs:label ?l .
+  }
+}

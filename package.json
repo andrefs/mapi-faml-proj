@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@comunica/logger-pretty": "^1.18.1"
+  }
+}

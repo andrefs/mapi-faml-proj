@@ -1,0 +1,21 @@
+var info = require('./ents_info.json');
+
+var classified = info.map(x => {
+  if(!x.wdLabel){
+    delete x.class;
+    return x;
+  }
+  const normLabel = x.wdLabel.replace(/^(\P{L}\S*\s*)+/u, '')
+  const words = normLabel.split(/\s+/).filter(w => w.length > 3 || w.match(/\p{Lu}/u));
+  const nw = words.length;
+  const ncw = words.filter(w => w.match(/\p{Lu}/u)).length;
+  x['class'] = ncw/nw >= 0.7 ? 'NE' : 'concept';
+  return x;
+});
+
+
+console.log('total:',classified.length);
+console.log('concept:',classified.filter(x => x.class && x.class === 'concept').length);
+console.log('NE:',     classified.filter(x => x.class && x.class === 'NE').length);
+console.log('other:',classified.filter(x => x.class && x.class !== 'concept' && x.class !== 'NE').length);
+console.log('other:',classified.filter(x => !x.class).length);

@@ -1,0 +1,8 @@
+
+https://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=select+%3Fp+%3Fo+where+%7B%0D%0A%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FAbleism%3E+%3Fp+%3Fo+.%0D%0A%7D&format=text%2Fhtml&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on&run=+Run+Query+
+
+https://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=select+%3Fp+%3Fo+where+%7B%0D%0A%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FAhmad_Tejan_Kabbah%3E+%3Fp+%3Fo+.%0D%0A%7D&format=text%2Fhtml&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on&run=+Run+Query+
+
+https://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=select+%3Fo+%3Fp+where+%7B%0D%0A++%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FAutomation%3E+%3Fo+%3Fp+.%0D%0A%7D&format=text%2Fhtml&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on&run=+Run+Query+
+
+https://dbpedia.org/sparql?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=select+%3Fp+%3Fo+where+%7B%0D%0A%3Chttp%3A%2F%2Fdbpedia.org%2Fresource%2FCar%3E+%3Fp+%3Fo+.%0D%0A%7D&format=text%2Fhtml&CXML_redir_for_subjs=121&CXML_redir_for_hrefs=&timeout=30000&debug=on&run=+Run+Query+

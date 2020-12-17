@@ -1,27 +1,36 @@
 
 
-1_original_datasets/WORD.zip                                Original IBM WORD dataset
-1_original_datasets/DBpediaVectors200_20Shuffle.txt.gz      Original DBpedia embeddings
+1_original_datasets/
+    WORD.zip                                Original IBM WORD dataset
+
+    DBpediaVectors200_20Shuffle.txt.gz      Original DBpedia embeddings
 
 
-2_clean_datasets/entities.txt                               DBpedia URLs of elements from pairs
-                                                            from IBM's WORD dataset
-2_clean_datasets/relatedness_full.tsv                       Pairs of entities from IBM's WORD
-                                                            dataset with corresponding semantic
-                                                            relatedness value and dataset split
-                                                            subset (train/test)
-2_clean_datasets/embeddings.txt                             Embeddings with DBpedia URLs and
-                                                            filtering out elements not present
-                                                            in the IBM WORD dataset
-2_clean_datasets/relatedness.csv                            Entries from relatedness_full.tsv,
-                                                            filtering out pairs in which at
-                                                            least one of the elements is
-                                                            missing from the embeddings
-2_clean_datasets/relatedness_train.tsv                      Relatedness train subset
-2_clean_datasets/relatedness_test.tsv                       Relatedness test subset
+2_clean_datasets/
+    entities.txt                            DBpedia URLs of elements from pairs
+                                            from IBM's WORD dataset
+
+    relatedness_full.tsv                    Pairs of entities from IBM's WORD
+                                            dataset with corresponding semantic
+                                            relatedness value and dataset split
+                                            subset (train/test)
+
+    embeddings.txt                          Embeddings with DBpedia URLs and
+                                            filtering out elements not present
+                                            in the IBM WORD dataset
+
+    relatedness.csv                         Entries from relatedness_full.tsv,
+                                            filtering out pairs in which at
+                                            least one of the elements is
+                                            missing from the embeddings
+
+    relatedness_train.tsv                   Relatedness train subset
+
+    relatedness_test.tsv                    Relatedness test subset
 
 
-code/filter_relatedness                                     Filter out pairs in which at least
-                                                            one of the elements is missing from
-                                                            the embeddings
+code/
+    filter_relatedness                      Filter out pairs in which at least
+                                            one of the elements is missing from
+                                            the embeddings
 
