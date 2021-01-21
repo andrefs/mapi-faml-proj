@@ -32,3 +32,70 @@
 
 2_clean_datasets/relatedness_test.tsv: 2_clean_datasets/relatedness.tsv
 	grep 'Test$$' 2_clean_datasets/relatedness.tsv > 2_clean_datasets/relatedness_test.tsv
+
+
+## Make pairs symmetrical
+
+2_clean_datasets/relatedness_sym.tsv: 2_clean_datasets/relatedness.tsv
+	./code/sym_relatedness > 2_clean_datasets/relatedness_sym.tsv
+
+2_clean_datasets/relatedness_sym_train.tsv: 2_clean_datasets/relatedness_sym.tsv
+	grep 'Train$$' 2_clean_datasets/relatedness_sym.tsv > 2_clean_datasets/relatedness_sym_train.tsv
+
+2_clean_datasets/relatedness_sym_test.tsv: 2_clean_datasets/relatedness_sym.tsv
+	grep 'Test$$' 2_clean_datasets/relatedness_sym.tsv > 2_clean_datasets/relatedness_sym_test.tsv
+
+
+
+## Merged datasets
+2_clean_datasets/merged_ds: 2_clean_datasets/relatedness.tsv 2_clean_datasets/embeddings.txt
+	code/merge_datasets > 2_clean_datasets/merged_ds
+
+2_clean_datasets/ds_train: 2_clean_datasets/merged_ds
+	grep 'Train$$' 2_clean_datasets/merged_ds > 2_clean_datasets/ds_train
+
+2_clean_datasets/ds_test: 2_clean_datasets/merged_ds
+	grep 'Test$$' 2_clean_datasets/merged_ds > 2_clean_datasets/ds_test
+
+2_clean_datasets/ds_train_embs: 2_clean_datasets/ds_train
+	cut -f 3-403 2_clean_datasets/ds_train > 2_clean_datasets/ds_train_embs
+
+2_clean_datasets/ds_train_ents: 2_clean_datasets/ds_train
+	cut -f 1,2 2_clean_datasets/ds_train > 2_clean_datasets/ds_train_ents
+
+2_clean_datasets/ds_test_embs: 2_clean_datasets/ds_test
+	cut -f 4-403 2_clean_datasets/ds_test > 2_clean_datasets/ds_test_embs
+
+2_clean_datasets/ds_test_target: 2_clean_datasets/ds_test
+	cut -f 3 2_clean_datasets/ds_test > 2_clean_datasets/ds_test_target
+
+2_clean_datasets/ds_test_ents: 2_clean_datasets/ds_test
+	cut -f 1-3 2_clean_datasets/ds_test > 2_clean_datasets/ds_test_ents
+
+## Symmetrical merged datasets
+
+2_clean_datasets/merged_sym: 2_clean_datasets/relatedness_sym.tsv 2_clean_datasets/embeddings.txt
+	code/merge_datasets 2_clean_datasets/relatedness_sym.tsv > 2_clean_datasets/merged_sym
+
+
+2_clean_datasets/ds_train_sym: 2_clean_datasets/merged_ds
+	grep 'Train$$' 2_clean_datasets/merged_ds > 2_clean_datasets/ds_train_sym
+
+2_clean_datasets/ds_test_sym: 2_clean_datasets/merged_ds
+	grep 'Test$$' 2_clean_datasets/merged_ds > 2_clean_datasets/ds_test_sym
+
+2_clean_datasets/ds_train_sym_embs: 2_clean_datasets/ds_train_sym
+	cut -f 3-403 2_clean_datasets/ds_train_sym > 2_clean_datasets/ds_train_sym_embs
+
+2_clean_datasets/ds_train_sym_ents: 2_clean_datasets/ds_train_sym
+	cut -f 1,2 2_clean_datasets/ds_train_sym > 2_clean_datasets/ds_train_sym_ents
+
+2_clean_datasets/ds_test_sym_embs: 2_clean_datasets/ds_test_sym
+	cut -f 4-403 2_clean_datasets/ds_test_sym > 2_clean_datasets/ds_test_sym_embs
+
+2_clean_datasets/ds_test_sym_target: 2_clean_datasets/ds_test_sym
+	cut -f 3 2_clean_datasets/ds_test_sym > 2_clean_datasets/ds_test_sym_target
+
+2_clean_datasets/ds_test_sym_ents: 2_clean_datasets/ds_test_sym
+	cut -f 1-3 2_clean_datasets/ds_test_sym > 2_clean_datasets/ds_test_sym_ents
+

@@ -1,0 +1,39 @@
+#!/usr/bin/env perl
+
+#PODNAME: cenas.pl
+
+use strict; use warnings;
+use Data::Dump qw/dump/;
+use FindBin;
+use feature qw/say/;
+
+open(my $relf, '<', "$FindBin::Bin/../2_clean_datasets/relatedness.tsv") or die $!;
+
+my $pairs = {};
+
+while(my $line = <$relf>){
+    chomp $line;
+    my ($u1,$u2,$score,$set) = split /\t/,$line;
+    $pairs->{$u1} //= {};
+    $pairs->{$u1}->{$u2} = [$score, $set];
+}
+
+foreach my $u1 (keys %$pairs){
+    foreach my $u2 (keys %{$pairs->{$u1}}){
+        # if($pairs->{$u2} && $pairs->{$u2}->{$u1}){
+        #     my $vals = join ',', ($pairs->{$u1}->{$u2}[0],$pairs->{$u1}->{$u2}[1], $pairs->{$u2}->{$u1}[0], $pairs->{$u2}->{$u1}[1]);
+        #     say "got one [$vals] $u1 $u2";
+        # }
+
+        my ($score, $set) = @{$pairs->{$u1}->{$u2}};
+
+        say "$u1\t$u2\t$score\t$set";
+
+        unless($pairs->{$u2} && $pairs->{$u2}->{$u1}){
+            # $pairs->{$u2}->{$u1} = $pairs->{$u1}->{$u2};
+            say "$u2\t$u1\t$score\t$set";
+        }
+    }
+}
+#    say $line if $ents->{$u1} && $ents->{$u2};
+

@@ -1,0 +1,30 @@
+#!/usr/bin/env perl
+
+#PODNAME: cenas.pl
+
+use strict; use warnings;
+use Data::Dump qw/dump/;
+use FindBin;
+use feature qw/say/;
+
+
+open(my $embf, '<', "$FindBin::Bin/../2_clean_datasets/embeddings.txt") or die $!;
+open(my $relf, '<', $ARGV[0] // "$FindBin::Bin/../2_clean_datasets/relatedness.tsv") or die $!;
+
+
+my $embs = {};
+while(my $line = <$embf>){
+    $line =~ /^<?(.*?)>?\s+(.*?)\s*$/;
+    $embs->{$1} = [split /\s/, $2];
+}
+
+while(my $line = <$relf>){
+    chomp $line;
+    my ($u1,$u2,$score,$set) = split /\t/,$line;
+    say "$u1\t$u2\t$score\t" .
+        (join "\t",@{$embs->{$u1}}) . "\t" .
+        (join "\t",@{$embs->{$u2}}) . "\t" .
+        $set;
+}
+
+
